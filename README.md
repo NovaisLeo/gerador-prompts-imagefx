@@ -1,6 +1,6 @@
-# Gerador de Prompts para ImageFX
+# Gerador de Prompts para ImageFX (v2)
 
-Este projeto é um app interativo feito com NiceGUI para gerar prompts realistas e cinematográficos para o ImageFX (Google).
+App interativo feito com NiceGUI para gerar prompts realistas e cinematográficos para o ImageFX (Google), com tradução automática do português para o inglês.
 
 ## Como rodar localmente
 
@@ -11,6 +11,6 @@ python main.py
 
 ## Publicação no Render
 
-- Conecte este repositório no https://render.com
+- Conecte este repositório ao https://render.com
 - Configure como Web Service Python
 - Comando de inicialização: `python main.py`

@@ -1,5 +1,7 @@
 from nicegui import ui
+from deep_translator import GoogleTranslator
 
+# Função que monta o prompt e traduz
 def gerar_prompt():
     sujeito = input_sujeito.value
     detalhes = input_detalhes.value
@@ -9,32 +11,35 @@ def gerar_prompt():
     imperfeicoes = input_imperfeicoes.value
     camera = input_camera.value
 
-    prompt = f"{sujeito} {detalhes}, {acao}, {ambiente}, {iluminacao}, {imperfeicoes}, {camera}"
-    resultado_label.set_text(prompt)
+    prompt_pt = f"{sujeito} {detalhes}, {acao}, {ambiente}, {iluminacao}, {imperfeicoes}, {camera}"
+    prompt_en = GoogleTranslator(source='auto', target='en').translate(prompt_pt)
+
+    resultado_label.set_text(prompt_en)
     copiar_btn.visible = True
 
+# Copiar texto para área de transferência
 def copiar_prompt():
     ui.run_javascript(f"navigator.clipboard.writeText(`{resultado_label.text}`)")
     ui.notify('✅ Prompt copiado!')
 
-ui.markdown("# 🎨 Gerador Interativo de Prompts para ImageFX\nPreencha os campos abaixo para criar prompts realistas e cinematográficos.")
+ui.markdown("# 🎨 Gerador Interativo de Prompts para ImageFX\nPreencha os campos abaixo **em português** — o prompt será gerado automaticamente em inglês para uso direto no ImageFX.")
 
-with ui.card().classes('bg-gray-900 text-white p-6 rounded-2xl shadow-lg'):
-    input_sujeito = ui.input(label='👤 Sujeito principal', placeholder='ex: a young girl').classes('mb-4')
-    input_detalhes = ui.input(label='🎨 Detalhamento visual', placeholder='ex: curly hair, freckles, worn jacket').classes('mb-4')
-    input_acao = ui.input(label='🎬 Ação ou expressão', placeholder='ex: holding a paper boat near a river').classes('mb-4')
-    input_ambiente = ui.input(label='🌄 Ambiente/contexto', placeholder='ex: foggy forest at dawn').classes('mb-4')
-    input_iluminacao = ui.input(label='💡 Iluminação', placeholder='ex: cinematic soft lighting').classes('mb-4')
-    input_imperfeicoes = ui.input(label='♻️ Imperfeições naturais', placeholder='ex: muddy boots, skin pores').classes('mb-4')
-    input_camera = ui.input(label='📷 Configuração de câmera', placeholder='ex: shot on Canon EOS R5, 85mm lens, f/1.4').classes('mb-4')
+with ui.card().classes('bg-white text-black p-6 rounded-2xl shadow-lg max-w-2xl mx-auto'):
+    input_sujeito = ui.input(label='👤 Sujeito principal', placeholder='ex: homem com barba grisalha').classes('mb-4')
+    input_detalhes = ui.input(label='🎨 Detalhamento visual', placeholder='ex: cabelo cacheado, pele bronzeada').classes('mb-4')
+    input_acao = ui.input(label='🎬 Ação ou expressão', placeholder='ex: olhando pela janela segurando um livro').classes('mb-4')
+    input_ambiente = ui.input(label='🌄 Ambiente/contexto', placeholder='ex: cabana de madeira sob chuva fina').classes('mb-4')
+    input_iluminacao = ui.input(label='💡 Iluminação', placeholder='ex: luz suave e difusa vinda da esquerda').classes('mb-4')
+    input_imperfeicoes = ui.input(label='♻️ Imperfeições naturais', placeholder='ex: rugas, sardas, cabelo desalinhado').classes('mb-4')
+    input_camera = ui.input(label='📷 Configuração de câmera', placeholder='ex: lente 85mm, f/1.4, Canon R5').classes('mb-4')
 
-    ui.button('✨ Gerar Prompt', on_click=gerar_prompt, color='orange', icon='wand2').classes('mb-4')
+    ui.button('✨ GERAR PROMPT', on_click=gerar_prompt, color='orange', icon='wand2').classes('mb-4')
 
-resultado_label = ui.label("Seu prompt aparecerá aqui...").classes('text-lg text-orange-400 mb-2')
+resultado_label = ui.label("Seu prompt aparecerá aqui...").classes('text-lg text-black mb-2')
 copiar_btn = ui.button('📋 Copiar Prompt', on_click=copiar_prompt, color='green', icon='copy').classes('mb-4')
 copiar_btn.visible = False
 
-with ui.expansion('📚 Exemplos prontos', icon='sparkles'):
+with ui.expansion('📚 Exemplos prontos (em português)', icon='sparkles'):
     def carregar_exemplo(prompt_data):
         input_sujeito.value = prompt_data[0]
         input_detalhes.value = prompt_data[1]
@@ -45,13 +50,13 @@ with ui.expansion('📚 Exemplos prontos', icon='sparkles'):
         input_camera.value = prompt_data[6]
 
     exemplos = [
-        ("a young boy", "with messy curly hair and freckles", "holding a red kite tangled in a tree branch",
-         "standing in a foggy field at sunrise", "soft cinematic lighting", "muddy boots, visible skin pores",
-         "shot on Canon EOS R5, 85mm lens, f/1.4"),
+        ("menino pequeno", "cabelos cacheados e sardas", "segurando uma pipa vermelha presa na árvore",
+         "campo com neblina ao amanhecer", "luz suave e cinematográfica", "botas sujas, poros visíveis",
+         "Canon EOS R5, lente 85mm, f/1.4"),
 
-        ("an elderly fisherman", "with weathered skin and gray beard", "sitting on a wooden boat",
-         "early morning mist on the lake", "golden hour lighting", "cracked hands, wrinkles, worn clothing",
-         "shot on Nikon D850, 50mm lens, f/1.8")
+        ("pescador idoso", "pele marcada pelo sol e barba grisalha", "sentado num barco de madeira",
+         "névoa sobre o lago de manhã", "luz dourada do nascer do sol", "mãos rachadas, rugas, roupa gasta",
+         "Nikon D850, lente 50mm, f/1.8")
     ]
 
     for exemplo in exemplos:
